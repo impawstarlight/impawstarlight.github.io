@@ -1,36 +1,23 @@
-const DBG = 0; /// show dbg() output
-const LG = 1;
+const DBG = false0; /// show dbg() output
+const LG = false;
 let dtab = 0; /// tab level for dbg() output
 let c = 0; //# MORE COUNTER
 
 const {abs} = Math; /// used by gcd() & lcm()
 const vrgx = /[^\d\+\-*()]/; /// regexp for eval unfriendly expression 
 
-bruh("x-y)^2")
-/*
-let xp = "xx^2/xy^z(y^3)^z(x+1)^2";
-//xp = "(x+y-z)^8+(x-y+z)^7";
-console.time();
-//;console.log(simp(xp, null, true));
-;console.log(bruh(xp));
-console.timeEnd();
-console.log(c);
-*/
+
 //# BROKEN SIMP
-//
+
 function bruh(xpr) {
-	xpr = encode(xpr);
-	return simp(xpr, null, true);
-	
-	
-	
-	
+	return simp(encode(xpr), null, true);
 }
 
 /** Simp algebruhic expressions
  * @param {string} xpr
- * @param {string} flag
- * @returns {string|object} The simped expression as a string. Or as an object if flag is = */
+ * @param {bool} mult - Mult symbol is - true: asterisk (*), false: space ( ), undefined: hidden
+ * @param {bool} welp - Output is - true: html formatted string, false: XP object, undefined: plain string
+ * @returns {string|object} */
 function simp(xpr, mult, welp) {
     if (dtab > 1000) alert("Too many function calls! Exit the page to avoid overload!");
 	dtab++;
@@ -98,7 +85,7 @@ function simp(xpr, mult, welp) {
 
 /** Gather the exponents & perform multiplication
  * @param {string} trm - An algebraic term, i.e. an expression not containing any top level add/subtract operation. e.g. "2*x*(y+z)^2", but not "2*x+(y+z)^2"
- * @returns {object|string} The term converted to an object, TR. If there are polynomial multiplication then the expanded multiplication string. e.g. "x*(y+z)" -> "x\*y+z\*y" */
+ * @returns {object|string[]} The term converted to an object, TR. If there are polynomial multiplication then the expanded multiplication string array. e.g. "x*(y+z)" -> "x\*y+z\*y" */
 function expindex(trm) { /// convert string variable & exponent to object
 	dtab++;
 	const TR = {
@@ -191,7 +178,7 @@ function expindex(trm) { /// convert string variable & exponent to object
 	let B = TR.vars; /// A for Array, B for oBject
 	for (let v in B) { /// simp exponents
 		//;lg("var", v);
-		B[v] = simp(B[v], true); //# B[v].length > 2
+		B[v] = simp(B[v], true);
 		if (B[v] === "0")
 			delete B[v];
 
@@ -305,11 +292,8 @@ function expindex(trm) { /// convert string variable & exponent to object
 
 /** Convert term object to string
  * @param {object} XP 
- * @param {string} flag  */
-/*
-nothn, space, mult
-html sup sub
-*/
+ * @param {bool} mult - Mult symbol is - true: asterisk (*), false: space ( ), undefined: hidden
+ * @param {bool} html - Output is - true: html formatted string, else: plain string */
 function trm2str(TR, mult, html) {
 	let s = "";
 	let m = mult ? "*" : (mult === false ? " " : ""); /// bruh
@@ -350,7 +334,9 @@ function trm2str(TR, mult, html) {
 
 /** Convert expression object to string
  * @param {object} XP 
- * @param {string} flag  */
+ * @param {bool} mult - Mult symbol is - true: asterisk (x*y), false: space (x y), undefined: hidden (xy)
+ * @param {bool} broken - Output is - true: unjoined terms array, else: joined whole expression
+ * @returns {string|string[]} */
 function xpr2str(XP, mult, broken) {
 	let s = [];
 	let m = mult ? "*" : (mult === false ? " " : ""); /// bruh
