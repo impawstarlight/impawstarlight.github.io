@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>BRUHsimp</title>
+		<meta name="viewport" content="width=device-width">
+		<link href="alge.css" rel="stylesheet">
+		<script src="bruhsimp.js"></script>
+	</head>
+	<body>
+		<div id="logo">
+			<span
+				id="alge">Alge</span><span
+				id="bruh">BRUH</span><span
+				id="simp">simp</span><span
+				id="lifier">lifier
+			</span>
+		</div>
+		<textarea id="inp" rows="1" placeholder="Expression, e.g. 2x+y-(yz/x)^2"></textarea>
+		<div id="out"></div>
+		
+		<script>
+			inp.oninput = function() {
+				let xpr = this.value;
+				let ans;
+				
+				if (!xpr)
+					ans = "";
+				else if (xpr === ""+xpr.match(/\s+/))
+					ans = "Emptiness<sup>TM</sup>";
+				else if (ans = xpr.match(/[^\w\s\(\)\+\-\*\/\^]/))
+					ans = '<span class="invalid">Unsupported character: "'+ans+'"</span>';
+				else {
+					inp.rows = 1 + (xpr.match(/\n/g) || []).length;
+					ans = bruh(xpr);
+				}
+				
+				out.innerHTML = ans;
+			};
+		</script>
+	</body>
+</html>

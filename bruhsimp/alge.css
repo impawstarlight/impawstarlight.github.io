@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
+body {
+	background: #111;
+	color: #ccc;
+}
+
+#logo {
+	font-size: 32px;
+	margin: 1em auto;
+	color: #555;
+	text-align: center;
+}
+
+#alge, #bruh {
+	font-family: serif;
+	font-style: italic;
+}
+
+#bruh {
+	color: DodgerBlue;
+}
+
+#bruh, #simp {
+	font-weight: bold;
+}
+
+#simp, #lifier {
+	font-family: "Dancing Script", cursive;
+}
+
+#simp {
+	color: Coral;
+}
+
+#inp {
+	display: block;
+	resize: none;
+	background: none;
+	color: inherit;
+	border: 2px solid DodgerBlue;
+}
+
+#inp:focus {
+	outline: none;
+	border-color: Coral;
+}
+
+#inp, #out {
+	font: 20px sans-serif;
+	width: 90%;
+	margin: 1em auto;
+	padding: 0.5em 1em;
+	border-radius: 1em;
+}
+
+#out {
+	box-sizing: border-box;
+	min-height: 47px;
+	font-family: serif;
+	font-style: italic;
+	border: 2px solid #555;
+}
+
+.invalid {
+	color: Coral;
+}
+
+sup, sub {
+	font-size: 0.71em;
+}
+
+
