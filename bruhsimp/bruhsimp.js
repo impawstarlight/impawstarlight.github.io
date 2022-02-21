@@ -1,4 +1,4 @@
-const DBG = false0; /// show dbg() output
+const DBG = false; /// show dbg() output
 const LG = false;
 let dtab = 0; /// tab level for dbg() output
 let c = 0; //# MORE COUNTER
