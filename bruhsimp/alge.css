@@ -3,6 +3,7 @@
 body {
 	background: #111;
 	color: #ccc;
+	font: 20px sans-serif;
 }
 
 #logo {
@@ -33,7 +34,7 @@ body {
 	color: Coral;
 }
 
-#inp {
+.inp {
 	display: block;
 	resize: none;
 	background: none;
@@ -41,12 +42,12 @@ body {
 	border: 2px solid DodgerBlue;
 }
 
-#inp:focus {
+.inp:focus {
 	outline: none;
 	border-color: Coral;
 }
 
-#inp, #out {
+.inp, .out {
 	font: 20px sans-serif;
 	width: 90%;
 	margin: 1em auto;
@@ -54,9 +55,9 @@ body {
 	border-radius: 1em;
 }
 
-#out {
+.out {
 	box-sizing: border-box;
-	min-height: 47px;
+	min-height: 46px;
 	font-family: serif;
 	font-style: italic;
 	border: 2px solid #555;
@@ -70,4 +71,58 @@ sup, sub {
 	font-size: 0.71em;
 }
 
+#btncont {
+	width: 90%;
+	margin: 1em auto;
+	height: 47px;
+	display: flex;
+	justify-content: space-between;
+}
 
+#addbtn, #hlpbtn  {
+	width: 33%;
+	height: 100%;
+	background: DodgerBlue;
+	border-radius: 1em;
+	font: bold 32px sans-serif;
+	color: White;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#hlpbtn {
+	background: Coral;
+}
+
+#btncont > div:active { /* *:active stopped working after removing ::before */
+	background: SeaGreen;
+}
+
+#halp {
+	transition: transform 0.2s ease-in-out;
+	transform-origin: top;
+}
+
+#halp.hidden {
+	transform: scale(1, 0);
+}
+
+table {
+	width: 100%;
+	max-width: 540px;
+	border-collapse: collapse;
+}
+
+table, tr, th, td {
+	border: 2px solid DodgerBlue;
+}
+
+th, td {
+	padding: 0.25em 0.5em;
+}
+
+li {
+	font-size: 0.8em;
+	margin-bottom: 0.4em;
+}
