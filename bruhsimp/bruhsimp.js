@@ -1,16 +1,18 @@
-const DBG = false; /// show dbg() output
-const LG = false;
-let dtab = 0; /// tab level for dbg() output
-let c = 0; //# MORE COUNTER
+const DBG = true;  /// show dbg() output
+const LG = true;   /// show lg() output
+let dtab = 0;      /// tab level for dbg/lg output
+let c = 0;         //# MORE COUNTER
 
-const {abs} = Math; /// used by gcd() & lcm()
+const {abs} = Math;		  /// used by gcd() & lcm()
 const vrgx = /[^\d\+\-*()]/; /// regexp for eval unfriendly expression 
 
+
+//console.log(simp("(a^2*(-b)^3*-c^5)^x"));
 
 //# BROKEN SIMP
 
 function bruh(xpr) {
-	return simp(encode(xpr), null, true);
+	return str2htm(simp(encode(xpr), true));
 }
 
 /** Simp algebruhic expressions
@@ -19,10 +21,11 @@ function bruh(xpr) {
  * @param {bool} welp - Output is - true: html formatted string, false: XP object, undefined: plain string
  * @returns {string|object} */
 function simp(xpr, mult, welp) {
-    if (dtab > 1000) alert("Too many function calls! Exit the page to avoid overload!");
+	if (dtab > 1000) alert("Too many function calls! Exit the page to avoid overload!");
 	dtab++;
-	const html = welp === true;
-	const broken = welp === null;
+	
+	const html     = welp === true;
+	const broken   = welp === null;
 	const asobject = welp === false;
 	
 	//xpr = encode(xpr);
@@ -40,23 +43,22 @@ function simp(xpr, mult, welp) {
 		return xpr; /// change to type string when flag isn't =
 	}*/
 	if (!asobject && !xpr.match(vrgx)) {
-		//;lg(c, "vrgx", xpr, welp);
 		dtab--;
 		return ""+(eval(xpr) || 0); /// change to type string
 	}
-	//;lg(++c, "simp", xpr, welp);
+	
 	xpr = breakBy("+-", xpr);
 	let XP = {};
 	
 	for (let trm of xpr) {
 		const TR = expindex(trm);
-		/// expanded mult expr
-		if (Array.isArray(TR)) {
+		
+		if (Array.isArray(TR)) { /// expanded mult expr
 			xpr.push(...TR);
 			continue;
 		}
 
-        let term = trm2str(TR, mult, html);//! mICHAEL hERE
+		let term = trm2str(TR, mult, html);//! mICHAEL hERE
 		//;dbg("term",term);
 
 		if (!XP[term]) {
@@ -75,10 +77,10 @@ function simp(xpr, mult, welp) {
 	}
 
 
-    //# seperate func maybe?
+	//# seperate func maybe?
 	if (!asobject)
 		XP = xpr2str(XP, mult, broken);
-    
+	
 	dtab--;
 	return XP;
 }
@@ -122,7 +124,7 @@ function expindex(trm) { /// convert string variable & exponent to object
 		
 		/// evaluate digit only expression
 		t = v+e;t
-		if (!t.match(vrgx)) {e
+		if (!t.match(vrgx)) {
 			let p = "up";
 			if (inv)
 				p = "down";
@@ -151,11 +153,32 @@ function expindex(trm) { /// convert string variable & exponent to object
 		}
 				
 		if (v[0] == "(") {
-			if (v.match(/[\+\-\*\/\^]/))
-				B = TR.paren;
-			else
-				v = v.slice(1, -1)
+			B = TR.paren;
+			/// power mult - 25/03/2022 1:12 AM
+			let _trm = v.slice(1, -1).replace(/^\+/, "");
+			if (e !== "1" && breakBy("+-", _trm).length === 1) {
+				_trm = breakBy("*\/", _trm);
+				if (_trm.length > 1 || _trm[0][0] !== "-") {
+					for (let _t of _trm) {
+						if (_t[0] === "-")
+							trm.push("("+_t+")^"+e);
+						else {
+							_v = breakBy("^", _t)[0];
+							_e = _t.slice(_v.length+1) || "";
+							e_ = "";
+							if (_e) {
+								_e = "(("+_e+")*(";
+								e_ = "))";
+							}
+							trm.push(_v+"^"+_e+e+e_);
+							//trm.push(_v+"^(("+_e+")*("+e+"))");
+						}
+					}
+					continue;
+				}
+			}
 		}
+		
 		if (!B[v]) 
 			B[v] = "";
 		B[v] += e; /// collect in TR
@@ -177,7 +200,6 @@ function expindex(trm) { /// convert string variable & exponent to object
 
 	let B = TR.vars; /// A for Array, B for oBject
 	for (let v in B) { /// simp exponents
-		//;lg("var", v);
 		B[v] = simp(B[v], true);
 		if (B[v] === "0")
 			delete B[v];
@@ -187,7 +209,6 @@ function expindex(trm) { /// convert string variable & exponent to object
 
 	B = TR.num;
 	for (let v in B) {
-		//;lg("num", v);
 		let e = B[v] = simp(B[v], true, false);e
 		if (e[""]) {
 			let coef = e[""].coef;
@@ -220,12 +241,13 @@ function expindex(trm) { /// convert string variable & exponent to object
 	//# paren loop performance
 
 	for (let v in B) {
-		//;lg("par", v);
 		let e = B[v] = simp(B[v], true, false);e
-		if (e[""] && e[""].coef.up > 0) {
+		if (e[""]) {
 			let coef = e[""].coef;
 			let { up, down } = coef;
 			e =  Math.floor(up/down);
+			if (e < 0 && v.match(/[/+/-]/))
+				continue;
 			coef.up -= e*down;
 			if (coef.up === 0)
 				delete B[v][""];
@@ -237,44 +259,27 @@ function expindex(trm) { /// convert string variable & exponent to object
 			B[v] = xpr2str(B[v], true);
 			e = 0;
 		}
-
+		
 		if (e) //# DONT SIMP
 			v = simp(v.slice(1, -1), true);v
+		
+		if (e < 0) {
+			s = "";
+			for (let c of v) {
+				if (c === "*") c = "/";
+				else if (c === "/") c = "*";
+				s += c;
+			}
+			v = "/"+s;
+			e *= -1;
+		}
+		
 		while (e--)
 			A.push(v);
 	}
 
-	/*
-	for (let v in B) { /// simp exponents
-		;;let e = B[v] = simp(B[v], "=");e
-		if (typeof e === "number")
-			delete B[v];
-		else if (e[""] && e[""].coef.up > 0) {
-			let { up, down } = e[""].coef;
-			if (down === 1) {
-				e = up;
-				delete B[v][""];
-				if (Object.keys(B[v]).length)
-					B[v] = xpr2str(B[v]);
-				else
-					delete B[v][""];
-			} else {e
-				e =  Math.floor(up/down);
-				B[v][""].coef.up -= e*down;
-				B[v] = xpr2str(B[v]);
-			}//# Performance tessst
-		} else {let x = B[v];x
-			B[v] = xpr2str(B[v]);
-			e = 0;
-		}
-		;lg("paren v e ",v,e);
-		v
-		if (e) v = simp(v.slice(1, -1), "+");v
-		while (e--)
-			A.push(v);
-	}*/
-
 	if (A.length) {
+		//;dbg(A);
 		let XP = {};
 		XP[trm2str(TR, true)] = TR;
 		trm = xpr2str(XP, true);
@@ -295,11 +300,11 @@ function expindex(trm) { /// convert string variable & exponent to object
  * @param {bool} mult - Mult symbol is - true: asterisk (*), false: space ( ), undefined: hidden
  * @param {bool} html - Output is - true: html formatted string, else: plain string */
 function trm2str(TR, mult, html) {
-	let s = "";
+	let s = ["", ""];
 	let m = mult ? "*" : (mult === false ? " " : ""); /// bruh
-    //# OPTIMIZE WITH MULT SIGN - less calls to encode()
+	//# OPTIMIZE WITH MULT SIGN - less calls to encode()
 
-    let {num, vars, paren} = TR;
+	let {num, vars, paren} = TR;
 	for (let B of [num, vars, paren]) {
 		let keys = Object.keys(B);
 		keys.sort();
@@ -308,12 +313,23 @@ function trm2str(TR, mult, html) {
 			let e = B[v];
 			//;lg("exp ",e);
 			if (html)
-				v = v.replace(/(?<=\D)(\d+)/g, "<sub>$1</sub>");
+				v = v.replace(/(?<=\w)(?<=\D)(\d+)/g, "<sub>$1</sub>");
+			
+			/// neg exp to div - 19/03/2022
+			let i = 0;
+			if (+e < 0) {
+				e = ""+(-1*e);
+				v = "/"+v;
+				i = 1;
+			} else
+				v = m+v;
 			
 			if (e === "1")
 				e = "";
 			else if (!html && e.match(/[\+\-\*\/]/)) /// attach necessary parenthesis
 				e = "("+e+")";
+			
+				
 			
 			if (e) {
 				if (html)
@@ -322,15 +338,52 @@ function trm2str(TR, mult, html) {
 					e = "^"+e;
 			}
 			
-			s += m+v+e;
+			s[i] += v+e;
 		}
 	}
-
-    if (m)
-    	s = s.slice(m.length);
+	
+	s = s.join("");
+	if (s[0] === "/")
+		s = "1"+s;
+	else if (m)
+		s = s.slice(m.length);
 
 	return s;
 }
+
+
+/** Format expression string for html with superscript & subscript, and remove mult symbols */
+function str2htm(s) {
+	return superscript(s).replace(/(?<=\w)(?<=\D)(\d+)/g, "<sub>$1</sub>")
+	                     .replace(/\*(?=\D)/g, "");
+	
+	/// function supeescript - 24/03/2022
+	function superscript(s) {
+		let xpr = breakBy("+-", s);
+		s = "";
+		for (let trm of xpr) {
+			trm = breakBy("*/", trm);
+			for (let t of trm) {
+				let v = breakBy("^", t)[0];
+				let e = t.slice(v.length+1);
+				
+				if (v.match(/\^/))
+					v = "("+superscript(v.slice(1, -1))+")";
+				s += v;
+				
+				if (e) {
+					if (e[0] === "(")
+						e = e.slice(1, -1);
+					if (e.match(/\^/))
+						e = superscript(e);
+					s += "<sup>"+e+"</sup>";
+				}
+			}
+		}
+		return s;
+	}
+}
+
 
 /** Convert expression object to string
  * @param {object} XP 
@@ -389,12 +442,11 @@ function strcmp(a, b) {
 /** Attach omitted mult symbol & remove whitespaces
  * @param {string} expr - Algebraic expression */
 function encode(expr) {
-    //;if (!expr.match(/[^\d\+\-\*\/\^]/)) return expr;
-	let xpr = expr
-		.replace(/\b\s+\b/g, "*") /// replace whitespace between terms with mult
-		.replace(/\s+/g, "") /// remove unnecessary whitespaces
-		.replace(/((?<=[\w\)])(?=\())|((?<=\))(?=[\w\(]))/g, "*") /// attach ommitted mult sign with parenthesis
-		.replace(/\B(?=\w)(?=\D)/g, "*"); /// attach ommitted mult sign between variables
+	let xpr = expr.replace(/\b\s+\b/g, "*") /// replace whitespace between terms with mult
+	              .replace(/\s+/g, "")      /// remove unnecessary whitespaces
+	              .replace(/((?<=[\w\)])(?=\())|((?<=\))(?=[\w\(]))/g, "*") /// attach ommitted mult sign with parenthesis
+	              .replace(/\B(?=\w)(?=\D)/g, "*"); /// attach ommitted mult sign between variables
+	
 	//# MULTICHARACTER NAME
 
 	let flag = 0, op = 0; /// to match parenthesises
@@ -426,7 +478,7 @@ function breakBy(d, expr) {
 			flag += F[c];
 		//; else if ((c == d[0] || c == d[1]) && !flag) {
 		//# TEST REGEX VS EQUALITY
-		else if (!flag && d.match("\\"+c)) {
+		else if (!flag && (c === d[0] || c === d[1])) {
 			/// to not break 2[*\^][+-]1 like 2^-1
 			if (c.match(/[+\-]/) && expr[i-1].match(/[*\/^]/))
 				continue;
@@ -458,10 +510,8 @@ function mult(A) {
 				tmp.push(trm1+"*"+trm2);
 		prod = tmp;
 	}
-	//# OPTIMIZE BY NOT SIMPING
-	//;lg("prod1", prod);
+	/// OPTIMIZE BY NOT SIMPING
 	//prod = simp(prod.join(""), "*");
-	//;lg("prod2", prod);
 	return prod;
 }
 
