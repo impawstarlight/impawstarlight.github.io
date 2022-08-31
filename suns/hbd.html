@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Happy Birthday</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="style.css" rel="stylesheet">
+		<script src="s1.1.js"></script>
+		<script src="s2.1.js"></script>
+		<style id="um">
+			@keyframes h-ence { 0% {} 100% {} }
+			@keyframes m-akes { 0% {} 100% {} }
+			@keyframes s-ense { 0% {} 100% {} }
+			
+			#h { animation: h-ence 43200s linear infinite; }
+			#m { animation: m-akes 3600s linear infinite; }
+			#s { animation: s-ense 60s linear infinite; }
+		</style>
+		<style id="dyncls">
+			.holdr {
+				bottom: 50%;
+				transform-origin: bottom;
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+			
+			.hours {
+				font: bold 14px "Dancing Script", cursive;
+				color: #888;
+				opacity: .75;
+			}
+			
+			.minutes {
+				top: 8px;
+				width: 2px;
+				height: 2px;
+				border-radius: 50%;
+				background: #888;
+				opacity: .5;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="frame">
+			<div id="face">
+				<div id="trans">
+					Happy Birthday
+					<div>LittleMissSunshine</div>
+				</div>
+				<div id="h" class="hands"></div>
+				<div id="m" class="hands"></div>
+				<div id="s" class="hands">
+					<div id="dose"></div>
+					<div id="nose"></div>
+				</div>
+			</div>
+			<div id="glaze"></div>
+		</div>
+		<div id="themes"></div>
+	</body>
+	<script>
+		var thms = {
+			"Crimson Charm": {
+				f: "AntiqueWhite",
+				fr: "Maroon",
+				a: "#211",
+				s: "Crimson",
+				tr: "s"
+			},
+			
+			"Purple Princess": {
+				f: "LavenderBlush",
+				a: "#212",
+				s: "Purple",
+				tr: "s"
+			},
+			
+			"Blue My Mind": {
+				b: "#333",
+				f: "#eee",
+				h: "#222",
+				m: "h",
+				s: "#009AE2",
+				tr: "#DC6573"
+			},
+			
+			"Cotton Candy": {
+				f: "MistyRose",
+				a: "#FFF9FC",
+				h: "#E7A",
+				m: "#E8B",
+				s: "#F9C"
+			},
+			
+			"Nightfell": {
+				b: "#263238",
+				f: "#234",
+				fr: "#081018",
+				h: "#ABC",
+				m: "#BCD",
+				s: "Crimson",
+				tr: "#ABC",
+				y: 1
+			},
+			
+			"Nightmare": {
+				f: "#080808",
+				b: "f",
+				fr: "#000",
+				/*hr: "#fff",
+				mn: "#E7BEE9",
+				tr: "#FBBBB6",*/
+				a: "#ff0000",
+				s: "#222",
+				ns: "a",
+				x: 1,
+				y: 1
+			},
+			
+			"Materwelon": {
+				f: "#DC6573",
+				fr: "#3CA95D",
+				a: "#444",
+				s: "#222"
+			},
+			
+			"Golden Nugget": {
+				f: "linear-gradient(#FFE8BB, #E8D6B3)",
+				fr: "linear-gradient(#F7C46C, #DB9B59)",
+				fs: "#DB9B59",
+				mn: "fs",
+				hr: "fs",
+				a: "linear-gradient(#FFDD44, #F7C070)",
+				s: "#FF1155",
+			},
+			
+			"idk im tired": {
+				//f: "linear-gradient(#FFE8BB, #E8D6B3)",
+				fr: "conic-gradient(#009AE2, #C26BBC, #3CA95D, #009AE2)",
+				fs: "#555",
+				mn: "fs",
+				hr: "fs",
+				h: "linear-gradient(#00A5A6, #555)",
+				m: "linear-gradient(#8981E8, #555)",
+				s: "#DC6573",
+			},
+			
+			"Plain Old Man": {
+				b: "#fff"
+			}
+			
+		}
+	</script>
+</html>
+
