@@ -207,8 +207,9 @@ function setTheme(arg) {
 	
 	if (!thm.th) {
 		if (dlt() < 20) {
-		y1 = hr;
-		(!thm.tr) && (tr = hr);
+			y1 = hr;
+			(!thm.tr) && (tr = hr);
+		}
 		(thm.y) && ([y1, y2] = [y2, y1]);
 	}
 	
