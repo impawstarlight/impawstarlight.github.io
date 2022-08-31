@@ -78,7 +78,7 @@ function lastTheme() {
 }
 
 function firsttimehuh() {
-	setTimeout('alert("Tap on the clock to change theme");', 5000);
+	setTimeout('alert("Tap on the clock to change theme");', 10000);
 }
 
 function initThemes() {
