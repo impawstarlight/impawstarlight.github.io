@@ -202,14 +202,15 @@ function setTheme(arg) {
 	frame.telm.style.background = fs;
 	face.telm.style.background  = f;
 	
-	let y1 = fs, y2 = f;
-	//console.log(dlt());
-	if (dlt() < 20) {
-		y1 = hr, y2 = f;
-		(!thm.tr) && (tr = hr);
-	}
+	let y1 = thm[thm.th] || thm.th || fs;
+	let y2 = f;
 	
-	if (thm.y) [y1, y2] = [y2, y1];
+	if (!thm.th) {
+		if (dlt() < 20) {
+		y1 = hr;
+		(!thm.tr) && (tr = hr);
+		(thm.y) && ([y1, y2] = [y2, y1]);
+	}
 	
 	themes.style.background = y1;
 	themes.style.color      = y2;
