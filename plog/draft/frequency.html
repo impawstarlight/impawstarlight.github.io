@@ -1,0 +1,274 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<h1>How to count frequency of numbers in a list</h1>
+<section class="article">
+<h2>Basic structure</h2>
+মনে করি আমাদের কিছু নাম্বারের একটা লিস্ট দেয়া আছে এরকম
+<pre><span class="syn4">list</span>: 1  2  3  2  4  1  0  3  4  0</span></pre>
+ধরা যাক আমাদের প্রশ্ন হচ্ছে এই লিস্টে কয়টা 1 আছে। সেক্ষেত্রে আমাদের প্রোগ্রামটা হতে পারে এরকম -
+<pre>
+...
+int count = 0;
+
+for (int i = 0; i &lt; size; i++)
+	if (list[i] == 1)
+		count++;
+...
+</pre>
+যদি বলা হতো কয়টা 2 আছে তাহলে আমরা চেক করতাম -
+<pre>if (list[i] == 2)</pre>
+একইভাবে 3 বা 4 এর বেলায় <tt>(list[i] == 3)</tt> বা <tt>(list[i] == 4)</tt> চেক করতাম।
+
+কিন্তু এখন বলা হলো এই লিস্টে কোন নাম্বারটা কতবার করে আছে সবগুলো বের করতে।
+
+সহজ সমাধান হচ্ছে যতগুলো আলাদা আলাদা নাম্বার গুনতে চাই ততগুলো কাউন্টার ভেরিয়েবল নিতে পারি।
+আমাদের লিস্টে শুধু 0 থেকে 4 পর্যন্ত নাম্বারগুলো আছে। তাই 0 এর জন্য <tt>count0</tt>, 1 এর জন্য <tt>count1</tt>, 2 এর জন্য <tt>count2</tt>, 3 এর জন্য <tt>count3</tt>, এবং 4 এর জন্য <tt>count4</tt> নামে মোট ৫টা ভেরিয়েবল দরকার হবে।
+এভাবে করলে কোডটা হতে পারে এরকম -
+<pre>
+...
+int count1 = 0, count2 = 0, count3 = 0, count4 = 0;
+
+for (int i = 0; i &lt; size; i++) {
+	if (list[i] == 0)
+		count0++;
+	else if (list[i] == 1)
+		count1++;
+	else if (list[i] == 2)
+		count2++;
+	else if (list[i] == 3)
+		count3++;
+	else if (list[i] == 4)
+		count4++;
+}
+...
+</pre>
+
+সহজ সমাধান, কিন্তু সুন্দর না। আবার একটু ঘাটাঘাটি করলে দেখা যাবে এটা খুব সীমিত সমাধান।
+যেমন আমাদের লিস্টে যদি 5, 6, 10 বা 100 থাকে তাহলে এই প্রোগ্রাম তাদেরকে কাউন্ট করবে না। তাদের জন্য আবার আরো কতগুলো কাউন্টার ভেরিয়েবল এবং কন্ডিশন বাড়াতে হবে।
+
+কিন্তু এভাবে আর কতগুলো ভেরিয়েবল আর কন্ডিশন একটা একটা করে লিখে যাবো? শত শত বা হাজার হাজার নাম্বারের জন্য তো হাজারটা ভেরিয়েবল নেওয়া সম্ভব হবে না।
+সেক্ষেত্রে আমাদের মাথায় আসতে পারে অ্যারে ব্যবহার করার আইডিয়া। দেখা যাক সেক্ষেত্রে কী করতে পারি।
+
+<h2>Using an Array for counters</h2>
+প্রথমে একটা অ্যারে তৈরি করলাম সবগুলো কাউন্টার একসাথে রাখার জন্য।
+<tt>int counts[5];</tt>
+ধরা যাক আমাদের ইনপুট লিস্টটা আগের মতই আছে।
+<pre><span class="syn4">list</span>: 1  2  3  2  4  1  0  3  4  0</span></pre>
+তাহলে আগের মতই আমাদের কাউন্টার দরকার ৫টা, তাই counts অ্যারের সাইজ হবে 5। এবং এর ভিতরে প্রথমে থাকবে 0 এর কাউন্টার, তারপর 1, 2, 3, 4।
+অর্থাৎ, যেটা আগে ছিল <tt>count0</tt> ভেরিয়েবল সেটা এখন হয়ে যাবে <tt>counts[0]</tt>। একইভাবে <tt>count1</tt> হয়ে যাবে <tt>counts[1]</tt> এবং <tt>count4</tt> হবে <tt>counts[4]</tt>।
+<pre>
+...
+int counts[5] = <span class="syn4">{ 0, 0, 0, 0, 0 }</span>;
+
+for (int i = 0; i &lt; size; i++) {
+	if (list[i] == 0)
+		counts[0]++;
+	else if (list[i] == 1)
+		counts[1]++;
+	else if (list[i] == 2)
+		counts[2]++;
+	else if (list[i] == 3)
+		counts[3]++;
+	else if (list[i] == 4)
+		counts[4]++;
+}
+...
+</pre>
+এখন এখানে আমরা খুব সহজ একটা প্যাটার্ন পেয়ে যাচ্ছি যার কারণে আমাদের প্রোগ্রামে বিশাল বড় একটা উপকার হবে।
+
+দেখা যাচ্ছে <tt>list[i]</tt> অর্থাৎ লিস্টের একটা ভ্যালু যখন 0, তখন আমরা <tt>counts[0]</tt> কে ইনক্রিমেন্ট করছি বা বাড়াচ্ছি। একইভাবে ভ্যালু যখন 1 তখন <tt>counts[1]</tt> বাড়ছে। তাহলে আমরা বলতে পারি ভ্যালু যখন <tt>x</tt> হয় তখন <tt>counts[x]</tt> ইনক্রিমেন্ট হবে।
+ফলে এখানে আমাদের এতগুলো কন্ডিশন চেক করার কোন প্রয়োজন রইলো না, আমরা শুধু এটুকু লিখলেই পারি -
+<pre>
+...
+for (int i = 0; i &lt; size; i++) {
+	counts[<span class="syn4">list[i]</span>]++;
+}
+...
+</pre>
+অথবা একটু পরিষ্কারভাবে বোঝার জন্য গুছিয়ে লিখতে পারি এভাবে -
+<pre>
+...
+for (int i = 0; i &lt; size; i++) {
+	int x = list[i];
+	counts[<span class="syn4">x</span>]++;
+}
+...
+</pre>
+
+এই প্রোগ্রামে মূলত কি ঘটছে একটু খেয়াল করি। একটা লুপের মাধ্যমে আমরা আমাদের লিস্টের ভেতরটা ঘুরে আসছি। লিস্টের এক একটা এলিমেন্ট/নাম্বার দেখে দেখে আমরা সেই নাম্বারের কাউন্টারটা ইনক্রিমেন্ট করছি। এখানে সবচেয়ে গুরুত্বপূর্ণ ব্যাপারটা হলো কখন কোন কাউন্টারটা আপডেট করছি, কাউন্টারটা আছে কোথায় এবং সেটাকে আমরা কীভাবে খুঁজে পাচ্ছি।
+
+আমাদের প্রোগ্রামে আমরা একটা অ্যারের ভেতর কাউন্টারগুলো এমনভাবে রেখেছি যাতে তার ইন্ডেক্স দেখেই বোঝা যায় এটা কোন নাম্বারের কাউন্টার। এজন্যই আমরা সেগুলোকে খুব সহজে আপডেট করতে পারছি।
+
+এখন তাহলে পুরো প্রোগ্রামটা দাঁড়ায় এরকম -
+<pre>
+#include &lt;stdio.h>
+
+int main() {
+	int list[10] = { 1, 2, 3, 2, 4, 1, 0, 3, 4, 0 };
+	int counts[5] = { 0, 0, 0, 0, 0 };
+	
+	for (int i = 0; i &lt; 10; i++) {
+		int x = list[i];
+		counts[x]++;
+	}
+	
+	// output
+	puts("Number: Frequency");
+	for (int i = 0; i &lt; 5; i++)
+		printf("%-6d: %d\n", i, counts[i]);
+	
+	return 0;
+}
+</pre>
+
+<h2>Beyond 0-4</h2>
+এখন তাহলে আমাদের প্রোগ্রাম মোটামুটি কমপ্লিট। কিন্তু এটাকে একটু ডায়নামিক বা ফ্লেক্সিবল বানানো দরকার। যেমন আমাদের নাম্বারের লিস্টটা ইউজার থেকে ইনপুট নিতে পারি। সাধারণত কোনো লিস্ট ইনপুট দেওয়ার ক্ষেত্রে এই ফরম্যাট হয় এরকম -
+প্রথমে একটা নাম্বার <tt>n</tt>, যেটা বোঝায় লিস্টের সাইজ কত হবে।
+তারপর একটা একটা করে nটা নাম্বার।
+<pre>
+<span class="syn4">Sample input</span>:
+5
+3 2 4 1 5
+</pre>
+<pre>
+...
+int n;
+scanf("%d", &n);
+
+int list[n];
+for (int i = 0; i &lt; n; i++)
+	scanf("%d", &list[i]);
+...
+</pre>
+ইনপুট নেওয়া শেষে আমরা আমাদের আসল কাজ শুরু। প্রথমে কাউন্টার অ্যারে ডিক্লেয়ার করতে হবে। কিন্তু এখন ঝামেলা হলো তার সাইজ কত হবে? আগেরবার আমাদের লিস্টে শুধু 0-4 পর্যন্ত নাম্বারগুলো ছিলো, তাই আমরা দেখেই বুঝে নিয়েছি আমাদের টোটাল ৫টা নাম্বার কাউন্ট করতে হবে। কিন্তু এবার তো লিস্টটা ইউজার থেকে ইনপুট নেওয়া হবে, এর ভেতরে কী কী থাকতে পারে সেটা তো আমরা জানি না।
+
+খুশির খবর হচ্ছে এ ধরনের প্রবলেমে সাধারণত বলে দেওয়া থাকে লিস্টের নাম্বারগুলো কোন রেঞ্জের হবে। যেমনঃ
+<ul>
+<li><a href="codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">Change It</a></li>
+<li><a href="codechef.com/problems/DOMINANT2" target="_blank" rel="noreferrer noopener">Dominant Element</a></li>
+<li><a href="codechef.com/problems/MODEFREQ" target="_blank" rel="noreferrer noopener">Mode of Frequencies</a></li>
+</ul>
+অর্থাৎ, আমাদের প্রোগ্রামটা লেখার আগে জানা থাকতে হবে এখানে ইনপুট হিসেবে কোন ভ্যালুগুলো আসতে পারে। কিংবা আমাদের প্রোগ্রামটা যে ব্যবহার করবে তাকে জানিয়ে দিতে হবে যে এই প্রোগ্রামটা কোন ভ্যালুগুলো নিয়ে কাজ করতে পারবে এবং পারবে না।
+
+<image src="constraints.webp" style="max-width: 100%; display: block; border-radius: 8px;"/>
+এখন তাহলে ধরে নেই আমরা <a href="codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">এই</a> প্রবলেমটা সলভ করছি। এখানে বলা আছে লিস্টের নাম্বারগুলো হবে 1-100 এর মধ্যে। অর্থাৎ ১০০টা কাউন্টার লাগবে। তাহলে কাউন্টার অ্যারের শুরুতে থাকবে 1 এর কাউন্টার অর্থাৎ, <tt>counts[0]</tt> হবে এখন 1 এর কাউন্টার। কারণ আমাদের লিস্টের ভ্যালুগুলোর মধ্যে 0 থাকবে না তাই 0 এর জন্য কোনো কাউন্টার রাখার দরকার নেই। এভাবে তাহলে 100 এর কাউন্টার হবে <tt>counts[99]</tt>।
+কিন্তু এভাবে সেটআপ করলে একটু কেমন যেন কনফিউজিং দেখায়। 
+কারণ তখন আমাদের <tt>counts[x]++</tt> এর বদলে <tt>counts[x-1]++</tt> লিখতে হবে।
+<pre>
+...
+for (int i = 0; i &lt; n; i++) {
+	int x = list[i];
+	counts[<span class="syn4">x-1</span>]++;
+}
+...
+</pre>
+তাই আমরা এভাবে করবো না। 0 এর কাউন্টার রেখে আগের মতই করবো। তাহলে আগের মতই <tt>counts[0]</tt> তে থাকবে 0 এর কাউন্টার, <tt>counts[1]</tt> এ থাকবে 1 এর কাউন্টার এবং এভাবে <tt>counts[100]</tt> এ থাকবে 100 এর কাউন্টার। অর্থাৎ টোটাল ১০১টা কাউন্টার, তাই <tt>counts[]</tt> এর সাইজ হবে 101।
+এরপর সবগুলো কাউন্টারের ইনিশিয়াল ভ্যালু 0 সেট করতে হবে। <span class="syn1">এই কাজটা আমরা প্রায়ই ভুলে যাই ফলে গারবেজ ভ্যালুর কারণে সঠিক রেজাল্ট পাই না</span>। তাই এটা সবসময় খেয়াল রাখতে হবে।
+(<span class="syn4">বোনাস প্রশ্ন</span> - ইনিশিয়ালাইজ না করলে সমস্যাটা কীভাবে হয়? অন্য সবকিছু রেখে 0 কেন সেট করি?)
+সবশেষে ঠিক আগের মত আমাদের লিস্টের ভেতর ঘুরে ঘুরে কাউন্ট করতে হবে।
+<pre>
+...
+int counts[101];
+for (int i = 0; i &lt; 101; i++)
+	counts[i] = 0;
+
+for (int i = 0; i &lt; n; i++) {
+	int x = list[i];
+	counts[x]++;
+}
+...
+</pre>
+মোটকথা হলো, <tt>counts[]</tt> এর সাইজ কত হবে সেটা নির্ভর করবে লিস্টের ভেতরের ভ্যালুগুলোর ওপর। তাই সেগুলোর রেঞ্জ দেখে বুঝতে হবে কতগুলো কাউন্টার দরকার।
+
+
+</section>
+<script>
+
+window.onload = () => {
+	const P = document.getElementsByTagName("pre");
+	for (let p of P) {
+		p.innerHTML = p.innerHTML.replace(
+			/(\bint\b)/g,
+			'<span class="syn1">$1</span>'
+		);
+		p.innerHTML = p.innerHTML.replace(
+			/(\b(if)|(else)|(for)\b)/g,
+			'<span class="syn2">$1</span>'
+		);
+		p.innerHTML = p.innerHTML.replace(
+			/((==)|(\+\+))/g,
+			'<span class="syn3">$1</span>'
+		);
+	}
+	
+}
+
+</script>
+<style>
+
+body {
+	background: #444;
+	color: #ddd;
+	font: 16px sans-serif;
+	margin: 0;
+}
+
+h1 {
+	background: DodgerBlue;
+	color: White;
+	padding: 16px;
+}
+
+.article {
+	white-space: pre-wrap;
+	margin: 16px;
+}
+
+pre {
+	background: #222;
+	color: #ddd;
+	border-radius: 16px;
+	padding: 16px;
+	tab-size: 4;
+	overflow-x: auto;
+}
+
+tt {
+	background: #222;
+	color: #87F2FE;
+	border-radius: 4px;
+	padding: 1px 2px;
+}
+
+.syn1 {
+	color: #EF8AAB;
+}
+
+.syn2 {
+	color: #58B8F6;
+}
+
+.syn3 {
+	color: #BA9BF3;
+}
+
+.syn4 {
+	color: #5DC879;
+	font-weight: bold;
+}
+
+h2 {
+	color: White;
+	border-bottom: 4px solid DodgerBlue;
+	text-shadow: 0 0 4px DodgerBlue;
+}
+
+a {
+	color: #58B8F6;
+	font-weight: bold;
+	font-size: 18px;
+	text-decoration: none;
+}
+
+
+</style>
