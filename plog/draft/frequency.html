@@ -144,14 +144,14 @@ for (int i = 0; i &lt; n; i++)
 
 খুশির খবর হচ্ছে এ ধরনের প্রবলেমে সাধারণত বলে দেওয়া থাকে লিস্টের নাম্বারগুলো কোন রেঞ্জের হবে। যেমনঃ
 <ul>
-<li><a href="codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">Change It</a></li>
-<li><a href="codechef.com/problems/DOMINANT2" target="_blank" rel="noreferrer noopener">Dominant Element</a></li>
-<li><a href="codechef.com/problems/MODEFREQ" target="_blank" rel="noreferrer noopener">Mode of Frequencies</a></li>
+<li><a href="//codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">Change It</a></li>
+<li><a href="//codechef.com/problems/DOMINANT2" target="_blank" rel="noreferrer noopener">Dominant Element</a></li>
+<li><a href="//codechef.com/problems/MODEFREQ" target="_blank" rel="noreferrer noopener">Mode of Frequencies</a></li>
 </ul>
 অর্থাৎ, আমাদের প্রোগ্রামটা লেখার আগে জানা থাকতে হবে এখানে ইনপুট হিসেবে কোন ভ্যালুগুলো আসতে পারে। কিংবা আমাদের প্রোগ্রামটা যে ব্যবহার করবে তাকে জানিয়ে দিতে হবে যে এই প্রোগ্রামটা কোন ভ্যালুগুলো নিয়ে কাজ করতে পারবে এবং পারবে না।
 
 <image src="constraints.webp" style="max-width: 100%; display: block; border-radius: 8px;"/>
-এখন তাহলে ধরে নেই আমরা <a href="codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">এই</a> প্রবলেমটা সলভ করছি। এখানে বলা আছে লিস্টের নাম্বারগুলো হবে 1-100 এর মধ্যে। অর্থাৎ ১০০টা কাউন্টার লাগবে। তাহলে কাউন্টার অ্যারের শুরুতে থাকবে 1 এর কাউন্টার অর্থাৎ, <tt>counts[0]</tt> হবে এখন 1 এর কাউন্টার। কারণ আমাদের লিস্টের ভ্যালুগুলোর মধ্যে 0 থাকবে না তাই 0 এর জন্য কোনো কাউন্টার রাখার দরকার নেই। এভাবে তাহলে 100 এর কাউন্টার হবে <tt>counts[99]</tt>।
+এখন তাহলে ধরে নেই আমরা <a href="//codechef.com/problems/CHNGIT" target="_blank" rel="noreferrer noopener">এই</a> প্রবলেমটা সলভ করছি। এখানে বলা আছে লিস্টের নাম্বারগুলো হবে 1-100 এর মধ্যে। অর্থাৎ ১০০টা কাউন্টার লাগবে। তাহলে কাউন্টার অ্যারের শুরুতে থাকবে 1 এর কাউন্টার অর্থাৎ, <tt>counts[0]</tt> হবে এখন 1 এর কাউন্টার। কারণ আমাদের লিস্টের ভ্যালুগুলোর মধ্যে 0 থাকবে না তাই 0 এর জন্য কোনো কাউন্টার রাখার দরকার নেই। এভাবে তাহলে 100 এর কাউন্টার হবে <tt>counts[99]</tt>।
 কিন্তু এভাবে সেটআপ করলে একটু কেমন যেন কনফিউজিং দেখায়। 
 কারণ তখন আমাদের <tt>counts[x]++</tt> এর বদলে <tt>counts[x-1]++</tt> লিখতে হবে।
 <pre>
