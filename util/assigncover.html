@@ -1,0 +1,154 @@
+<html>
+
+<head>
+	<title>Convert HTML to PDF</title>
+	<style>
+		
+		@media screen {
+			html {
+				transform: scale(0.5);
+				transform-origin: top left;
+			}
+
+			body {
+				width: 210mm;
+				height: 297mm;
+			}
+
+			*[contenteditable] {
+				border-bottom: 1pt solid var(--color3);
+				-background: #def;
+			}
+
+			#student-name, #roll {
+				border-color: var(--color4);
+			}
+		}
+
+		@media print, screen {
+			#inputs {
+				display: none;
+			}
+		}
+
+		:root {
+			--color1: #0090d0;
+			--color2: #00B1FF;
+			--color3: #15A703;
+			--color4: #EF3E51;
+		}
+
+		body {
+			margin: 1cm;
+			border: 2pt solid var(--color2);
+			padding: 1cm;
+			background: #fff;
+			color: #000;
+			font: 16pt serif;
+			font-style: italic;
+		}
+
+		input {
+			display: block;
+			margin: 1em;
+		}
+
+		#container {
+			position: relative;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		#header {
+			text-align: center;
+		}
+
+		.submit-folks {
+			/* margin-top: 4cm; */
+			text-align: center;
+		}
+
+		.group-title, #dept {
+			font-weight: bold;
+			color: var(--color1);
+		}
+
+		.group-title {
+			width: 50%;
+			margin: auto;
+			border-bottom: 1pt solid var(--color2);
+		}
+
+		#student-name, #roll {
+			font-size: 1.125em;
+			font-weight: bold;
+		}
+
+		#footer {
+			/* position: absolute;
+			bottom: 0; */
+			width: 100%;
+			-outline: auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		#logo {
+			height: 7cm;
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<div id="container">
+		<div id="header">
+			<div>Assignment No: <span id="anumber" contenteditable>1</span></div>
+			<div>Assignment Title: <span id="atitle" contenteditable>Differentiation, Optimization, Matrix, Determinant</span></div>
+			<div>Course Title: <span id="ctitle">Mathematics I</span></div>
+			<div>Course Code: <span id="ccode">MATH 101</span></div>
+			<div>Date: <span id="date" contenteditable>1 June 2023</span></div>
+			
+		</div>
+
+		<div class="submit-folks">
+			<div class="group-title">Submitted By</div>
+			<div><span id="student-name" contenteditable>Abdul Kaium</span></div>
+			<div>Roll: <span id="roll" contenteditable>366</span></div>
+			<div id="session">2021-22</div>
+		</div>
+
+		<div class="submit-folks">
+			<div class="group-title">Submitted To</div>
+			<div id="student-name">Dr. Md. Sabbir Alam</div>
+			<div id="designation">Professor</div>
+			<div id="department">Department of Mathematics</div>
+		</div>
+
+		<div id="footer">
+			<img id="logo" src="https://upload.wikimedia.org/wikipedia/commons/2/29/JU_logo.png">
+			<div id="dept">Department of Computer Science & Engineering</div>
+			<div>Faculty of Mathematical and Physical Sciences</div>
+			<div>Jahangirnagar University</div>
+			<div>Savar, Dhaka</div>
+
+		</div>
+	</div>
+
+	<script>
+
+		document.getElementById('logo').addEventListener('click', function () {
+			// Trigger the print dialog
+			window.print();
+			
+		});
+
+	</script>
+
+</body>
+
+</html>
