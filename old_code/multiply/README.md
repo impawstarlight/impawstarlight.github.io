@@ -9,7 +9,7 @@ Since standard variables like `long long` max out at about 19 digits, this progr
 ```bash
 gcc -std=c99 str_mult.c && ./a.out
 ```
-Using `c99` is necessary here this code uses the `gets` function which was removed in C11
+Using `c99` is necessary here since this code uses the `gets` function which was removed in C11
 
 ---
 
